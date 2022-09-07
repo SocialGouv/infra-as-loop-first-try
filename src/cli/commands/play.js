@@ -8,6 +8,7 @@ module.exports = (program) =>
     .alias("p")
     .description("Play loops")
     .addOption(options.cwd)
+    .option("--dry", "run loads and tests but don't run execs")
     .action(async (_opts, command) => {
       const opts = command.optsWithGlobals()
       await play(opts)

@@ -1,6 +1,8 @@
 const os = require("os")
 const path = require("path")
+const { mkdtemp } = require("fs/promises")
 
+const fs = require("fs-extra")
 const defaultsDeep = require("lodash.defaultsdeep")
 
 const ctx = require("~/ctx")
@@ -20,6 +22,22 @@ module.exports = async (opts = {}, inlineConfigs = [], rootConfig = {}) => {
       defaultFunction: () => {
         const homeOrTmpDir = os.homedir() || os.tmpdir()
         return `${homeOrTmpDir}/.infra-as-loop`
+      },
+    },
+    buildRootPath: {
+      env: "IAL_BUILD_ROOT_PATH",
+      defaultFunction: () => path.join(os.tmpdir(), "infra-as-loop"),
+    },
+    buildPath: {
+      env: "IAL_BUILD_PATH",
+      defaultFunction: async (config) => {
+        const { buildRootPath } = config
+        await fs.ensureDir(buildRootPath)
+        return mkdtemp(path.join(buildRootPath, "build-"))
+      },
+      transform: async (buildPath) => {
+        await fs.ensureDir(buildPath)
+        return buildPath
       },
     },
     cwd: {

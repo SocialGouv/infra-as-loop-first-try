@@ -11,7 +11,7 @@ const copyFilter = require("./copy-filter")
 const recurseDependency = require("./recurse-dependencies")
 
 module.exports = async (config, logger = globalLogger) => {
-  logger.debug("Load dependencies")
+  logger.debug({ buildPath: config.buildPath }, "Load dependencies")
   await recurseDependency({
     config,
     beforeChildren: async ({ target, definition, scope, name }) => {
