@@ -4,6 +4,7 @@ const { mkdtemp } = require("fs/promises")
 
 const fs = require("fs-extra")
 const defaultsDeep = require("lodash.defaultsdeep")
+const mergeWith = require("lodash.mergewith")
 
 const ctx = require("~/ctx")
 const loadStructuredConfig = require("~/utils/load-structured-config")
@@ -12,6 +13,23 @@ const { version } = require(`${__dirname}/../../package.json`)
 
 const loadDependencies = require("./load-dependencies")
 const recurseDependency = require("./recurse-dependencies")
+
+const mergeWithKeepPlaybooksRefs = (objValue, ...srcValues) =>
+  mergeWith(
+    objValue,
+    ...srcValues,
+    (oValue, srcValue, key, _object, _source, stack) => {
+      if (stack.size === 0 && key === "playbooks") {
+        if (oValue) {
+          Object.assign(srcValue, oValue)
+        }
+        return srcValue
+      }
+      if (Array.isArray(oValue)) {
+        return srcValue
+      }
+    }
+  )
 
 module.exports = async (opts = {}, inlineConfigs = [], rootConfig = {}) => {
   const env = ctx.get("env") || process.env
@@ -64,6 +82,7 @@ module.exports = async (opts = {}, inlineConfigs = [], rootConfig = {}) => {
     configOverride: rootConfigOverride,
     options: opts,
     env,
+    mergeWith: mergeWithKeepPlaybooksRefs,
   })
 
   const configDirs = []
@@ -80,6 +99,7 @@ module.exports = async (opts = {}, inlineConfigs = [], rootConfig = {}) => {
     options: opts,
     env,
     emptyAsUndefined: true,
+    mergeWith: mergeWithKeepPlaybooksRefs,
   })
 
   let { dependencies } = config
