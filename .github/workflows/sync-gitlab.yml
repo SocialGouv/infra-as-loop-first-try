@@ -20,5 +20,5 @@ jobs:
         GITLAB_HOSTNAME: "gitlab.fabrique.social.gouv.fr"
         GITLAB_USERNAME: "oauth2"
         GITLAB_PASSWORD: ${{ secrets.GITLAB_TOKEN }}
-        GITLAB_PROJECT_ID: "189"
+        GITLAB_PROJECT_ID: "209"
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
