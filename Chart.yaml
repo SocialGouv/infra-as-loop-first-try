@@ -1,0 +1,11 @@
+apiVersion: v2
+name: infra-as-loop
+version: 1.0.0
+home: https://github.com/SocialGouv/infra-as-loop
+description: Infra as Code idempotent CronJob
+icon: https://avatars.githubusercontent.com/u/45039513?v=4
+sources:
+  - https://github.com/SocialGouv/infra-as-loop
+maintainers:
+  - name: Fabrique numérique des Ministères Sociaux
+    email: dsi-incubateur@sg.social.gouv.fr
