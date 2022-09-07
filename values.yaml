@@ -12,3 +12,8 @@ resources:
     cpu: 500m
     memory: 512Mi
 component: 
+config: |
+  play:
+    name: main
+    title: "Main loop"
+  

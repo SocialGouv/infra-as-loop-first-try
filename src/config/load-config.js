@@ -1,10 +1,15 @@
 const os = require("os")
 const path = require("path")
 
+const defaultsDeep = require("lodash.defaultsdeep")
+
 const ctx = require("~/ctx")
 const loadStructuredConfig = require("~/utils/load-structured-config")
 
 const { version } = require(`${__dirname}/../../package.json`)
+
+const loadDependencies = require("./load-dependencies")
+const recurseDependency = require("./recurse-dependencies")
 
 module.exports = async (opts = {}, inlineConfigs = [], rootConfig = {}) => {
   const env = ctx.get("env") || process.env
@@ -57,6 +62,31 @@ module.exports = async (opts = {}, inlineConfigs = [], rootConfig = {}) => {
     options: opts,
     env,
     emptyAsUndefined: true,
+  })
+
+  let { dependencies } = config
+  if (!dependencies) {
+    dependencies = {}
+    config.dependencies = dependencies
+  }
+  dependencies = Object.entries(dependencies)
+    .filter(([_key, value]) => value.enabled !== false && value.import)
+    .reduce((acc, [key, value]) => {
+      acc[key] = value
+      return acc
+    }, {})
+
+  await loadDependencies(config)
+
+  await recurseDependency({
+    config,
+    beforeChildren: async ({ definition }) => {
+      const { config: extendsConfig } = definition
+      if (!extendsConfig) {
+        return
+      }
+      defaultsDeep(config, extendsConfig)
+    },
   })
 
   return config

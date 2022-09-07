@@ -1,0 +1,2 @@
+play:
+  - use: contrib:k8s-namespace

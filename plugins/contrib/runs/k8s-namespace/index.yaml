@@ -1,0 +1,10 @@
+# run in tmpdir, all content of the run in ./
+vars:
+  name:
+test:
+retry: 2
+# testBefore:
+# testAfter:
+# exec: | # gomplate using with
+#   infra-as-loop run.js
+#   node run.js

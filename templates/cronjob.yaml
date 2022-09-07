@@ -31,12 +31,15 @@ spec:
               args: ["play"]
               volumeMounts:
                 - name: config-volume
-                  mountPath: /app/config.yaml
+                  mountPath: /app/.infra-as-loop/config.yaml
                   subPath: config.yaml
                 {{ range $secret := .Values.mountSecrets }}
                 - name: secret-{{ $secret.name }}
                   mountPath: /secrets/{{ $secret.name }}
                 {{ end }}
+              env:
+                - name: IAL_HOMEDIR
+                  value: /app/.infra-as-loop
               resources:
                 limits:
                   cpu: {{ .Values.resources.limits.cpu }}

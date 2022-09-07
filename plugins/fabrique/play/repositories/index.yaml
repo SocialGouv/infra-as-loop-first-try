@@ -1,0 +1,5 @@
+play:
+  - use: github/repository/deploy-key
+  - use: github/repository/kontinuous-webhook
+  - use: github/repository/kontinuous-webhook-secret
+  # - use: github/repository/branch-rule

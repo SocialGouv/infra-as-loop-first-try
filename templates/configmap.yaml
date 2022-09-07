@@ -8,5 +8,4 @@ metadata:
   namespace: "{{ .Release.Namespace }}"
   {{ end }}
 data:
-  config.yaml: |
-    foo: bar
+  config.yaml: {{ tpl .Values.config . | quote }}

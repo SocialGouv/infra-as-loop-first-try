@@ -1,0 +1,3 @@
+dependencies:
+  contrib:
+    import: SocialGouv/infra-as-loop/plugins/contrib
