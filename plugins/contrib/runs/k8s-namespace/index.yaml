@@ -5,6 +5,7 @@ test:
 retry: 2
 # testBefore:
 # testAfter:
-# exec: | # gomplate using with
-#   infra-as-loop run.js
-#   node run.js
+# exec: | # gomplate using .vars, .options
+#   node ./run.js
+# if no run specified here but run.js, run.js will be invoked with {vars, options}
+# test: { use: "namespace-exists" }
